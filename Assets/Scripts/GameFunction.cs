@@ -55,6 +55,7 @@ public class GameFunction : MonoBehaviour {
 	public GameObject CountryGrid;
 	public GameObject Country;
     private GameObject CountryClone;
+    public GameObject MapPanel;
 
     public int ControlCountry;
 
@@ -68,6 +69,11 @@ public class GameFunction : MonoBehaviour {
     public int zhi;
     public int mei;
     public int InputtedNumber;
+
+    //Double Click
+    public float Interval = 0.5f;
+    private float firstClicked = 0;
+    private float secondClicked = 0;
 
     //GameFunctions
     #region
@@ -318,7 +324,24 @@ public class GameFunction : MonoBehaviour {
 
     public void ZoomCamera()
     {
-
+        secondClicked = Time.realtimeSinceStartup;
+        var Zoom = MapPanel.GetComponent<MapZoom>();
+        if (secondClicked - firstClicked < Interval)
+        {
+            if(Zoom.Zooming == false)
+            {
+                Zoom.Zooming = true;
+            }
+            else
+            {
+                Zoom.Zooming = false;
+            }
+            
+        }
+        else
+        {
+            firstClicked = secondClicked;
+        }
     }
 
     public void ClickSound()
