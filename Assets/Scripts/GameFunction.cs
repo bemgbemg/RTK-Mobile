@@ -85,6 +85,7 @@ public class GameFunction : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        
         KaiFa = false;
         ShiShe = false;
         ShuSong = false;
@@ -101,6 +102,7 @@ public class GameFunction : MonoBehaviour {
         PicData = JsonMapper.ToObject(lll.text);
         InfoData = JsonMapper.ToObject(zzz.text);
         #endregion
+
         MaxPlayer = InfoData.Count;
         CountryStart();
         SetTime();
