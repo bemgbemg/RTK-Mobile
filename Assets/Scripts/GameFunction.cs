@@ -9,9 +9,11 @@ using System.IO;
 public class GameFunction : MonoBehaviour {
     //Jsondata
     #region
+    public TextAsset Lang;
     private TextAsset lll;
     private TextAsset www;
     private TextAsset zzz;
+    private JsonData xxx;
     public JsonData MapData;
     public JsonData PicData;
     public JsonData InfoData;
@@ -37,6 +39,9 @@ public class GameFunction : MonoBehaviour {
     public int year; //年份
     public int month; //月
     #endregion
+
+    //Lang 0=SCN 1=TCN 2=EN
+    public int lang;
 
     //Sounds
     public AudioSource ClickButton;
@@ -85,6 +90,8 @@ public class GameFunction : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        lang = 0;
         
         KaiFa = false;
         ShiShe = false;
@@ -98,9 +105,11 @@ public class GameFunction : MonoBehaviour {
         lll = Resources.Load<TextAsset>("Countries189");
         www = Resources.Load<TextAsset>("MapData");
         zzz = Resources.Load<TextAsset>("CountOfCountries189");
+        
         MapData = JsonMapper.ToObject(www.text);
         PicData = JsonMapper.ToObject(lll.text);
         InfoData = JsonMapper.ToObject(zzz.text);
+        xxx = JsonMapper.ToObject(Lang.text);
         #endregion
 
         MaxPlayer = InfoData.Count;
@@ -144,6 +153,19 @@ public class GameFunction : MonoBehaviour {
         {
             Bot();
         }
+        CheckShuSong();
+    }
+
+    void CheckShuSong()
+    {
+        if(MaxControlling == 0)
+        {
+            ShuSong = false;
+        }
+        else
+        {
+            ShuSong = true;
+        }
     }
 
     void Bot()
@@ -174,7 +196,7 @@ public class GameFunction : MonoBehaviour {
             if (bool.Parse(PicData[int.Parse(Country.name)][3].ToString()) == true)
             {
                 PanelOfChooseKing.SetActive(true);
-                ChooseThisKing.text = string.Format("你选择了{0}势力，确定吗？", PicData[int.Parse(Country.name)][4].ToString());
+                ChooseThisKing.text = string.Format(xxx[lang][0].ToString(), PicData[int.Parse(Country.name)][4].ToString());
                 playing = Country.GetComponent<MapData>().CountryID;
                 starting = false;
                 Ontheplayer = int.Parse(CountryGrid.transform.Find(playing.ToString()).GetComponent<Country>().controls[0]);
@@ -243,19 +265,18 @@ public class GameFunction : MonoBehaviour {
         showtrusty.text = country.GetComponent<Country>().Trusty.ToString();
         UI.text = "在" + City.text + "征收了xxx";
     }
+
+    public void ConfirmForZhengshou()
+    {
+        UI.text = xxx[lang][1].ToString();
+    }
+
     public void Shushong()
     {
-        int count;
-        var country = CountryGrid.transform.Find(Player.ToString());
-        count = country.GetComponent<Country>().controlscount;
-        if(count == 1)
+        var Zoom = MapPanel.GetComponent<MapZoom>().Zooming;
+        if (ShuSong == true)
         {
-
-        }
-        else
-        {
-            ShuSong = true;
-
+            Debug.Log("ShuSong");
         }
     }
 
